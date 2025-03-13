@@ -1,14 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<computer_extension_attribute>
-    <id>29</id>
-    <name>Build Version</name>
-    <enabled>true</enabled>
-    <description></description>
-    <data_type>String</data_type>
-    <input_type>
-        <type>script</type>
-        <platform>Mac</platform>
-        <script>#!/bin/bash
+#!/bin/bash
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # SCRIPT INFO
@@ -43,10 +33,7 @@ else
 fi
 
 if [ -n "${build_ver}" ]; then
-    echo "&lt;result&gt;${build_ver}&lt;/result&gt;"
+    echo "<result>${build_ver}</result>"
 fi
 
-exit 0</script>
-    </input_type>
-    <inventory_display>Extension Attributes</inventory_display>
-</computer_extension_attribute>
+exit 0
