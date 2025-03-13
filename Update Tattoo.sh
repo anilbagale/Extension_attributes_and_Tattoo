@@ -5,10 +5,11 @@ getDateAndTime=$(date "+%a_%b-%d-%Y_%H-%M-%S")
 
 	# Set Local Information
 	status=0
-	build="$4"
-	build_version="$5"
-	current_date=$(date +"%Y-%m-%d %T")
+	build="MacMD"
+	build_version="1.00.00"
+        current_date=$(date +"%Y-%m-%d %T")
 	tattoo_plist="/usr/local/MacMD/MacMD.plist"
+ 	entity="GOOGLE"
 	
 	os_ver=$(/usr/bin/sw_vers -productVersion)
 	os_minor_ver=$( /usr/bin/sw_vers -productVersion | /usr/bin/cut -d. -f2 )
@@ -25,10 +26,10 @@ getDateAndTime=$(date "+%a_%b-%d-%Y_%H-%M-%S")
 	echo " "
 	echo "##########################################################################################"
 	echo "#                                                                                        #"
-	echo "#                      IQVIA Tattoo of the Mac - $logBannerDate                    #"
+	echo "#                  Tattoo of the Mac - $logBannerDate                                    #"
 	echo "#                                                                                        #"
 	echo "##########################################################################################"
-	echo "IQVIA Tattoo of the Mac has Started..."
+	echo " Tattoo of the Mac has Started..."
 	
 
 	# Get serial of this Mac
@@ -53,13 +54,10 @@ getDateAndTime=$(date "+%a_%b-%d-%Y_%H-%M-%S")
 	echo "Writing Build OS key with a value of ${os_ver} to ${tattoo_plist}"
 	defaults write "${tattoo_plist}" "BuildOS" -string "${os_ver}"
 	status=$?
-
-	echo "Writing Site key with a value of ${site} to ${tattoo_plist}"
-	defaults write "${tattoo_plist}" "Site" -string "${site}"
-	status=$?
-
-	echo "Writing Entity key with a value of ${entity} to ${tattoo_plist}"
+    
+    echo "Writing Entity key with a value of ${entity} to ${tattoo_plist}"
 	defaults write "${tattoo_plist}" "Entity" -string "${entity}"
 	status=$?
-
+    sudo jamf recon
+    
 exit
