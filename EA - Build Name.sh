@@ -33,7 +33,7 @@ else
 fi
 
 if [ -n "${build}" ]; then
-    echo "&lt;result&gt;${build}&lt;/result&gt;"
+    echo "<result>${build}</result>"
 fi
 
 exit 0
