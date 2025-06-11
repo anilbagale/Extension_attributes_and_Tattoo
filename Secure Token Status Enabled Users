@@ -1,0 +1,20 @@
+#!/bin/bash
+
+accounts=""
+
+# Get a list of local accounts
+local_accounts=$(dscl . -list /Users | grep -v "_")
+
+# Check secure token status for each local account
+for account in $local_accounts; do
+    secure_token_status=$(sysadminctl -secureTokenStatus "$account" 2>&1 | awk '/ENABLED/ {print "Enabled"} /DISABLED/ {print "Disabled"} /UNKNOWN/ {print "Not Set"}')
+
+    # Add condition to include only accounts with secure token enabled
+    if [ "$secure_token_status" == "Enabled" ]; then
+        user_status="$account - Secure Token Status: $secure_token_status"
+        accounts="$accounts""$user_status
+"
+    fi
+done
+
+echo "<result>$accounts</result>"
