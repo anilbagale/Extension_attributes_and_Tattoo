@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Define the base directory for PaperCut
+PAPERCUT_BASE="/Applications/PaperCut Print Deploy Client"
+
+# Find the latest versioned folder dynamically
+PAPERCUT_CLIENT_PATH=$(find "$PAPERCUT_BASE" -type f -name "print-deploy-client" 2>/dev/null | head -n 1)
+
+# Check if the PaperCut Print Deploy Client exists
+if [ -n "$PAPERCUT_CLIENT_PATH" ]; then
+    # Capture only the first version number correctly
+    CLIENT_VERSION=$("$PAPERCUT_CLIENT_PATH" 2>&1 | grep -m 1 -oE '([0-9]+\.[0-9]+\.[0-9]+)')
+
+    # Check if a version was extracted
+    if [ -n "$CLIENT_VERSION" ]; then
+        echo "<result>$CLIENT_VERSION</result>"
+    else
+        echo "<result>Version Not Found</result>"
+    fi
+else
+    echo "<result>Not Installed</result>"
+fi
