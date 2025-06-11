@@ -1,0 +1,28 @@
+#!/bin/bash
+
+MIN_UPDATE_VERSION=211
+jdk_result="Not Found"
+
+get_update_version() {
+    echo "$1" | awk -F_ '{print $2}'
+}
+
+plugin_java="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java"
+
+if [ -x "$plugin_java" ]; then
+    version_output=$("$plugin_java" -version 2>&1)
+    jdk_version=$(echo "$version_output" | awk -F\" '/version/ {print $2}')
+    
+    if [[ "$jdk_version" == 1.8* ]]; then
+        update=$(get_update_version "$jdk_version")
+        if [[ "$update" =~ ^[0-9]+$ && "$update" -ge "$MIN_UPDATE_VERSION" ]]; then
+            jdk_result="Yes ($jdk_version)"
+        else
+            jdk_result="No ($jdk_version)"
+        fi
+    else
+        jdk_result="Not 8 ($jdk_version)"
+    fi
+fi
+
+echo "<result>$jdk_result</result>"
