@@ -1,0 +1,23 @@
+#!/bin/bash
+
+MIN_UPDATE_VERSION=211
+
+get_update_version() {
+    echo "$1" | awk -F_ '{print $2}'
+}
+
+jre_result="Not Found"
+
+jre_bin="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java"
+
+if [ -x "$jre_bin" ]; then
+    jre_version=$("$jre_bin" -version 2>&1 | awk -F\" '/version/ {print $2}')
+    update=$(get_update_version "$jre_version")
+    if [[ "$update" =~ ^[0-9]+$ && "$update" -ge "$MIN_UPDATE_VERSION" ]]; then
+        jre_result="Yes ($jre_version)"
+    else
+        jre_result="No ($jre_version)"
+    fi
+fi
+
+echo "<result>$jre_result</result>"
