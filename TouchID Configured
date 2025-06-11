@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Get all users with UID >= 500 (standard users)
+users=$(dscl . list /Users UniqueID | awk '$2 >= 500 {print $1}')
+
+# Initialize result
+result="None"
+
+# Loop through users and check biometric templates
+for user in $users; do
+    uid=$(id -u "$user" 2>/dev/null)
+    if [ -z "$uid" ]; then
+        continue
+    fi
+
+    output=$(sudo /usr/bin/bioutil -c -s 2>/dev/null)
+
+    if echo "$output" | grep -q "User $uid:.*1 biometric template"; then
+        result="$user"
+        break
+    fi
+done
+
+# Output for Jamf
+echo "<result>$result</result>"
