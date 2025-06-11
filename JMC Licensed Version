@@ -1,0 +1,22 @@
+#!/bin/bash
+
+jmc_result="Not Found"
+
+jmc_path="/Applications/JDK Mission Control.app"
+
+if [ -d "$jmc_path" ]; then
+    info_plist="$jmc_path/Contents/Info.plist"
+    if [ -f "$info_plist" ]; then
+        version=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$info_plist" 2>/dev/null)
+        team_id=$(codesign -dvv "$jmc_path" 2>&1 | grep "TeamIdentifier=" | awk -F= '{print $2}')
+        if [[ "$team_id" == "VB5E2TV963" ]]; then
+            jmc_result="Yes ($version)"
+        else
+            jmc_result="No (Signed by $team_id, $version)"
+        fi
+    else
+        jmc_result="Unknown"
+    fi
+fi
+
+echo "<result>$jmc_result</result>"
