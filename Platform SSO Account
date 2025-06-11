@@ -1,0 +1,11 @@
+#!/bin/bash
+
+curUser=$(ls -l /dev/console | cut -d " " -f 4)
+
+loggedInUser=$( echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ { print $3 }' )
+
+echo $loggedInUser
+
+PSSO=$(dscl . read /Users/$loggedInUser dsAttrTypeStandard:AltSecurityIdentities | awk -F'SSO:' '/PlatformSSO/ {print $2}')
+
+echo "<result>$PSSO</result>"
